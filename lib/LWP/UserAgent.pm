@@ -1036,13 +1036,14 @@ sub mirror
                 chmod 0777, $file;
                 unlink $file;
             }
-            rename( $tmpfile, $file )
-                or die "Cannot rename '$tmpfile' to '$file': $!\n";
 
             # make sure the file has the same last modification time
             if ( my $lm = $response->last_modified ) {
-                utime $lm, $lm, $file;
+                utime $lm, $lm, $tmpfile;
             }
+
+            rename( $tmpfile, $file )
+                or die "Cannot rename '$tmpfile' to '$file': $!\n";
         }
     }
     # The local copy is fresh enough, so just delete the temp file
